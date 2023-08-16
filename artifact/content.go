@@ -57,11 +57,14 @@ func NewContent(filename string) (Artifact, error) {
 		if err != nil {
 			return nil, err
 		}
-	}
-
-	err = ctt.LoadCache()
-	if err != nil {
-		return nil, err
+	} else {
+		// could be branchless, but since the true case
+		// already populates the content, there's no
+		// need to read the cache again
+		err = ctt.LoadCache()
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &ctt, nil
@@ -72,8 +75,31 @@ func (*Content) HasCache(dirPath string) bool {
 	return !errors.Is(err, os.ErrNotExist)
 }
 
-func (*Content) LoadCache() error {
-	// TODO: Implement me
+func (ctt *Content) LoadCache() error {
+	fmt.Println("loading cache...")
+
+	baseCacheDir := path.Clean(fmt.Sprintf("%s/content", cacheDir))
+	return loadCache(baseCacheDir, &ctt.Documents[0])
+}
+
+func loadCache(baseDir string, parentDoc *Document) error {
+	docDir := fmt.Sprintf("%s/%s", baseDir, parentDoc.Folder)
+	docFilePath := path.Clean(fmt.Sprintf("%s/%s", docDir, parentDoc.Filename))
+	fmt.Printf("loading %s\n", docFilePath)
+
+	docBody, err := os.ReadFile(docFilePath)
+	if err != nil {
+		return err
+	}
+	parentDoc.Body = docBody
+
+	// using `i` instead of `_, doc` for mutability
+	for i := range parentDoc.Children {
+		err = loadCache(docDir, &parentDoc.Children[i])
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
@@ -100,7 +126,7 @@ func writeContent(baseDir string, parentDoc *Document) error {
 		return err
 	}
 
-	// using `i` instead of `_, doc` for mutability
+	// again, using `i` instead of `_, doc` for mutability
 	for i := range parentDoc.Children {
 		err = writeContent(docDir, &parentDoc.Children[i])
 		if err != nil {
