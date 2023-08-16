@@ -1,14 +1,14 @@
 {
-  "base_url": "https://github.com/lanjoni/lpi4noobs/blob/main",
+  "base_url": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/",
   "documents": [
     {
       "name": "README",
-      "folder": "/",
+      "folder": "",
       "filename": "README.md",
       "children": [
         {
           "name": "Introdução",
-          "folder": "/content/intro",
+          "folder": "content/intro/",
           "filename": "README.md",
           "children": [
             {
@@ -31,7 +31,7 @@
         },
         {
           "name": "Conceitos",
-          "folder": "/content/conceitos",
+          "folder": "content/conceitos/",
           "filename": "README.md",
           "children": [
             {
@@ -58,7 +58,7 @@
         },
         {
           "name": "Prática",
-          "folder": "/content/pratica",
+          "folder": "content/pratica/",
           "filename": "README.md",
           "children": [
             {
@@ -89,7 +89,7 @@
         },
         {
           "name": "Administração",
-          "folder": "/content/administracao",
+          "folder": "content/administracao/",
           "filename": "README.md",
           "children": [
             {
@@ -108,7 +108,7 @@
         },
         {
           "name": "Finalização",
-          "folder": "/content/finalizacao",
+          "folder": "content/finalizacao/",
           "filename": "README.md",
           "children": [
             {

@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
+	"path"
 )
 
 type Document struct {
@@ -12,6 +15,7 @@ type Document struct {
 	Folder   string     `json:"folder"`
 	Filename string     `json:"filename"`
 	Children []Document `json:"children"`
+	Body     []byte
 }
 
 type Content struct {
@@ -25,7 +29,7 @@ const (
 )
 
 func NewContent(filename string) (Artifact, error) {
-	filePath := fmt.Sprintf("%s/%s", resourcesDir, filename)
+	filePath := path.Clean(fmt.Sprintf("%s/%s", resourcesDir, filename))
 	file, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
@@ -37,17 +41,28 @@ func NewContent(filename string) (Artifact, error) {
 		return nil, err
 	}
 
-	if !ctt.HasCache(cacheDir) {
-		err := os.Mkdir(cacheDir, os.ModePerm)
+	cttCacheDir := path.Clean(fmt.Sprintf("%s/content", cacheDir))
+	if !ctt.HasCache(cttCacheDir) {
+		err := os.MkdirAll(cttCacheDir, os.ModePerm)
+		if err != nil {
+			return nil, err
+		}
+
+		err = ctt.FetchCache()
+		if err != nil {
+			return nil, err
+		}
+
+		err = ctt.WriteCache()
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	// TODO: Move back to checking after implemented
-	ctt.FetchCache()
-
-	ctt.LoadCache()
+	err = ctt.LoadCache()
+	if err != nil {
+		return nil, err
+	}
 
 	return &ctt, nil
 }
@@ -63,26 +78,80 @@ func (*Content) LoadCache() error {
 	return nil
 }
 
-func (*Content) WriteCache() error {
-	// TODO: Implement me
+func (ctt *Content) WriteCache() error {
+	fmt.Println("writing cache...")
+
+	baseCacheDir := path.Clean(fmt.Sprintf("%s/content", cacheDir))
+	return writeContent(baseCacheDir, &ctt.Documents[0])
+}
+
+func writeContent(baseDir string, parentDoc *Document) error {
+	docDir := path.Clean(fmt.Sprintf("%s/%s", baseDir, parentDoc.Folder))
+	_, err := os.Stat(docDir)
+	if errors.Is(err, os.ErrNotExist) {
+		os.MkdirAll(docDir, os.ModePerm)
+	}
+
+	docFilePath := path.Clean(fmt.Sprintf("%s/%s", docDir, parentDoc.Filename))
+	fmt.Printf("writing %s\n", docFilePath)
+
+	err = os.WriteFile(docFilePath, parentDoc.Body, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
+	// using `i` instead of `_, doc` for mutability
+	for i := range parentDoc.Children {
+		err = writeContent(docDir, &parentDoc.Children[i])
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
 func (ctt *Content) FetchCache() error {
-	// TODO: Implement me
-	for _, doc := range ctt.Documents {
-		fetchDocument(&doc)
+	fmt.Println("fetching cache...")
+
+	return fetchContent(ctt.BaseURL, &ctt.Documents[0])
+}
+
+func fetchContent(baseURL string, parentDoc *Document) error {
+	docBody, err := fetchDocument(baseURL, parentDoc)
+	if err != nil {
+		return err
+	}
+	parentDoc.Body = docBody
+
+	// again, using `i` instead of `_, doc` for mutability
+	for i := range parentDoc.Children {
+		curDoc := &parentDoc.Children[i]
+		curBaseURL := fmt.Sprintf("%s%s", baseURL, parentDoc.Folder)
+
+		err = fetchContent(curBaseURL, curDoc)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
 }
 
-func fetchDocument(doc *Document) error {
-	// TODO: Implement me
+func fetchDocument(baseURL string, doc *Document) ([]byte, error) {
+	docURL := fmt.Sprintf("%s%s%s", baseURL, doc.Folder, doc.Filename)
+	fmt.Printf("fetching %s...\n", docURL)
 
-	for _, cDoc := range doc.Children {
-		return fetchDocument(&cDoc)
+	resp, err := http.Get(docURL)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil
+	return respBody, nil
 }
