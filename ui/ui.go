@@ -1,51 +1,39 @@
 package ui
 
 import (
+	"fmt"
+
 	"fyne.io/fyne/v2"
 	fapp "fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/layout"
-	"fyne.io/fyne/v2/widget"
-	"github.com/fyne-io/terminal"
 )
 
 type UI struct {
-	App    fyne.App
-	Window fyne.Window
+	App     fyne.App
+	Window  fyne.Window
+	Session *SessionUI
 }
+
+const (
+	appName    string = "LPI4Noobs Interactive"
+	appVersion string = "0.0.1"
+)
 
 func New(width float32, height float32) *UI {
 	app := fapp.New()
-	window := app.NewWindow("LPI4Noobs Interactive")
+
+	windowTitle := fmt.Sprintf("%s %s", appName, appVersion)
+	window := app.NewWindow(windowTitle)
 	window.Resize(fyne.NewSize(width, height))
 
-	ttyConsole := terminal.New()
+	session := NewSession()
 
-	sessionPage := container.NewHSplit(
-		container.NewVSplit(
-			widget.NewRichTextFromMarkdown("# FOOBAR\nentao familia vou falar sobre esse bgl aqui\n## Agua\nAgua eh muito bom ne"),
-			widget.NewRichTextFromMarkdown("# Exercicio 1.1\nFaca um radiador em 2 passos..."),
-		),
-		container.New(
-			layout.NewGridWrapLayout(fyne.NewSize(400, 540)),
-			ttyConsole,
-		),
-	)
+	window.SetContent(session.Container)
 
-	window.SetContent(
-		container.NewAppTabs(
-			container.NewTabItem("Bem-Vindo", widget.NewButton("hello", func() {})),
-			container.NewTabItem("Sessao 1", sessionPage),
-		),
-	)
-
-	go func() {
-		_ = ttyConsole.RunLocalShell()
-		app.Quit()
-	}()
+	go RunTTY(session.TTY)
 
 	return &UI{
-		App:    app,
-		Window: window,
+		App:     app,
+		Window:  window,
+		Session: session,
 	}
 }
