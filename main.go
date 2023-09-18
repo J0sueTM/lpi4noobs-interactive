@@ -2,22 +2,21 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/donseba/go-htmx"
 
 	"github.com/foolin/goview"
 	"github.com/foolin/goview/supports/echoview-v4"
+	"github.com/j0suetm/lpi4noobs-interactive/api"
 	"github.com/j0suetm/lpi4noobs-interactive/db"
 	"github.com/labstack/echo/v4"
 	echoMiddleware "github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
-	_, err := db.New("session.db")
+	lpiDB, err := db.New("session.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,29 +41,19 @@ func main() {
 	e.GET("/htmx.min.js", func(c echo.Context) error {
 		return c.File("views/script/htmx.min.js")
 	})
-	e.GET("/img/:filename", func(c echo.Context) error {
-		filePath := fmt.Sprintf("resources/img/%s", c.Param("filename"))
+	e.GET("/img/:filename", api.LocalImage)
+	e.GET("/.github/:filename", api.GithubImage)
+	e.GET("/content/img/:filename", api.ContentImage)
 
-		_, err := os.Stat(filePath)
-		if err != nil {
-			return c.String(http.StatusNotFound, "File not found")
-		}
+	lpiAPI := &api.API{
+		DB: lpiDB,
+	}
 
-		return c.File(filePath)
-	})
-
-	// sessionStt, err := session.New("cache/session.db")
-	// if err != nil {
-	//  	log.Fatal(err)
-	// }
-	//
-	// sessionGroup := e.Group("/session")
-	// {
-	//  	sessionGroup.GET("", func(c echo.Context) error {
-	//  		return c.Render(http.StatusOK, "session.html", sessionStt)
-	//  	})
-	//  	sessionGroup.GET("/content", sessionStt.Content)
-	// }
+	sessionG := e.Group("/session")
+	{
+		sessionG.GET("", lpiAPI.Session)
+		sessionG.GET("/content", lpiAPI.Content)
+	}
 
 	err = e.Start(":4192")
 	e.Logger.Fatal(err)

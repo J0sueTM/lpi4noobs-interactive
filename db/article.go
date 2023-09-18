@@ -21,11 +21,6 @@ type Article struct {
 	Children    []Article `json:"children" gorm:"foreignKey:ParentRefer"`
 }
 
-type ArticleTree struct {
-	Article
-	Children []*ArticleTree `json:"children"`
-}
-
 func PopulateArticles(resource string) (*Article, error) {
 	data, err := os.ReadFile(resource)
 	if err != nil {
@@ -114,4 +109,19 @@ func readAndPopulateArticleChildren(db *gorm.DB, root *Article) error {
 func (rootArticle *Article) Write(db *gorm.DB) error {
 	res := db.Create(rootArticle)
 	return res.Error
+}
+
+func (rootArticle *Article) FindByID(id uint) *Article {
+	if rootArticle.ID == id {
+		return rootArticle
+	}
+
+	for _, article := range rootArticle.Children {
+		foundArticle := article.FindByID(id)
+		if foundArticle != nil {
+			return foundArticle
+		}
+	}
+
+	return nil
 }

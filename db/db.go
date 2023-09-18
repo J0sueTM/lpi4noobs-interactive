@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"os"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -16,6 +15,7 @@ const (
 type DB struct {
 	Refer       *gorm.DB
 	RootArticle *Article
+	Sessions    []Session
 }
 
 func New(filePath string) (*DB, error) {
@@ -54,8 +54,29 @@ func New(filePath string) (*DB, error) {
 		}
 	}
 
+	sessions, err := ReadSessions(db)
+	if err != nil {
+		return nil, err
+	} else if len(sessions) <= 0 {
+		// create default session if none exist.
+		defaultSession := Session{
+			Username:   "default",
+			ArticleID:  rootArticle.ID,
+			Article:    *rootArticle,
+			ExerciseID: 0,
+		}
+
+		err = WriteSession(db, &defaultSession)
+		if err != nil {
+			return nil, err
+		}
+
+		sessions = append(sessions, defaultSession)
+	}
+
 	return &DB{
 		Refer:       db,
 		RootArticle: rootArticle,
+		Sessions:    sessions,
 	}, nil
 }
