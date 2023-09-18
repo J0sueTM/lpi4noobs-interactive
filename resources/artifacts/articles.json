@@ -1,0 +1,124 @@
+{
+  "title": "Início",
+  "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/README.md",
+  "children": [
+    {
+      "title": "Introdução",
+      "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/intro/README.md",
+      "children": [
+        {
+          "title": "História",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/intro/historia.md"
+        },
+        {
+          "title": "Instalação",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/intro/instalacao.md"
+        },
+        {
+          "title": "Conhecendo",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/intro/conhecendo.md"
+        },
+        {
+          "title": "Interfaces",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/intro/interfaces.md"
+        }
+      ]
+    },
+    {
+      "title": "Conceitos",
+      "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/conceitos/README.md",
+      "children": [
+        {
+          "title": "Terminal",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/conceitos/terminal.md"
+        },
+        {
+          "title": "Estrutura",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/conceitos/estrutura.md"
+        },
+        {
+          "title": "Su e Sudo",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/conceitos/sudo.md"
+        },
+        {
+          "title": "Man",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/conceitos/man.md"
+        },
+        {
+          "title": "Variáveis de Ambiente",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/conceitos/variaveis.md"
+        }
+      ]
+    },
+    {
+      "title": "Prática",
+      "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/pratica/README.md",
+      "children": [
+        {
+          "title": "Navegação",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/pratica/navegacao.md"
+        },
+        {
+          "title": "Manipulação",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/pratica/manipulacao.md"
+        },
+        {
+          "title": "Edição",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/pratica/edicao.md"
+        },
+        {
+          "title": "Compressão",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/pratica/compressao.md"
+        },
+        {
+          "title": "Combinação",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/pratica/combinacao.md"
+        },
+        {
+          "title": "Shell Script",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/pratica/shellscript.md"
+        }
+      ]
+    },
+    {
+      "title": "Administração",
+      "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/administracao/README.md",
+      "children": [
+        {
+          "title": "Processos",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/administracao/processos.md"
+        },
+        {
+          "title": "Usuários",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/administracao/usuarios.md"
+        },
+        {
+          "title": "Redes",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/administracao/redes.md"
+        }
+      ]
+    },
+    {
+      "title": "Finalização",
+      "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/finalizacao/README.md",
+      "children": [
+        {
+          "title": "Linux, Windows e macOS",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/finalizacao/linux.md"
+        },
+        {
+          "title": "Curiosidades",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/finalizacao/curiosidades.md"
+        },
+        {
+          "title": "Certificação",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/finalizacao/certificacao.md"
+        },
+        {
+          "title": "Agradecimentos",
+          "remote": "https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/content/finalizacao/agradecimentos.md"
+        }
+      ]
+    }
+  ]
+}

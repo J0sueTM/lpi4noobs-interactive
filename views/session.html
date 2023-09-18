@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPI4Noobs</title>
+
+    <script src="htmx.min.js"></script>
+    <link rel="stylesheet" href="bundle.css"/>
+  </head>
+  <body class="text-light bg-dark">
+    <main class="w-full h-full flex flex-row">
+      <div class="w-full h-screen pb-20 overflow-y-scroll
+                  md:pb-16">
+        <div
+          class="w-full h-3/4 px-4"
+          id="content"
+          hx-get="/session/content"
+          hx-trigger="load"
+          hx-target="#content"
+          hx-swap="innerHTML"
+          ></div>
+        <div id="exercise"></div>
+      </div>
+      <div
+        class="hidden w-full h-full
+               md:block"
+        ># eita porra</div>
+    </main>
+    <footer class="fixed bottom-0 pt-4 pb-2 space-x-4 w-full text-center bg-dark">
+      <a class="underline" href="https://j0suetm.com">Josué Teodoro (J0sueTM) j0suetm.com</a>
+      <a class="underline" href="https://github.com/J0sueTM/lpi4noobs-interactive/graphs/contributors">
+        et. al.
+      </a>
+      <a class="underline" href="https://heartdevs.com/">He4rt Devs</a>
+    </footer>
+  </body>
+</html>
