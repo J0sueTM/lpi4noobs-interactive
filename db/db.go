@@ -43,7 +43,7 @@ func New(filePath string) (*DB, error) {
 	if err != nil {
 		return nil, err
 	} else if rootArticle == nil {
-		rootArticle, err := PopulateArticles(articlesResource)
+		rootArticle, err = PopulateArticles(articlesResource)
 		if err != nil {
 			return nil, err
 		}
@@ -62,7 +62,6 @@ func New(filePath string) (*DB, error) {
 		defaultSession := Session{
 			Username:   "default",
 			ArticleID:  rootArticle.ID,
-			Article:    *rootArticle,
 			ExerciseID: 0,
 		}
 

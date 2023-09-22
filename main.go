@@ -38,8 +38,12 @@ func main() {
 	e.GET("/bundle.css", func(c echo.Context) error {
 		return c.File("views/style/bundle.css")
 	})
+	// yes i know i'm repeating myself
 	e.GET("/htmx.min.js", func(c echo.Context) error {
 		return c.File("views/script/htmx.min.js")
+	})
+	e.GET("/hyperscript.min.js", func(c echo.Context) error {
+		return c.File("views/script/hyperscript.min.js")
 	})
 	e.GET("/img/:filename", api.LocalImage)
 	e.GET("/.github/:filename", api.GithubImage)

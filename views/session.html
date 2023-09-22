@@ -6,33 +6,73 @@
     <title>LPI4Noobs</title>
 
     <script src="htmx.min.js"></script>
+    <script src="hyperscript.min.js"></script>
     <link rel="stylesheet" href="bundle.css"/>
   </head>
   <body class="text-light bg-dark">
     <main class="w-full h-full flex flex-row">
-      <div class="w-full h-screen pb-20 overflow-y-scroll
+      <div class="w-full h-screen overflow-y-scroll
                   md:pb-16">
+        <header class="fixed w-full px-4 py-2 grid grid-cols-3 grid-rows-1 gap-2 bg-gradient-to-b from-dark to-transparent
+                       md:w-1/2">
+          <!-- home -->
+          <a class="" href="/">
+            <svg class="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
+            </svg>
+          </a>
+          <h1 class="text-center font-bold text-2xl">{{ .Article.Title }}</h1>
+          <div class="flex flex-row space-x-2 items-center justify-end">
+            <!-- back -->
+            <svg class="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+            </svg>
+            <!-- next -->
+            <svg class="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+            </svg>
+          </div>
+        </header>
+        <div class="fixed bottom-0 w-full px-4 py-2 bg-gradient-to-t from-dark to-transparent
+                    md:w-1/2">
+          <div
+            class="flex flex-row space-x-2 cursor-pointer"
+            _="on click toggle .hidden on #exercise"
+            >
+            <svg class="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+            </svg>
+            <p class="font-semibold">{{ 0 }} exercícios</p>
+          </div>
+          <div
+            class="w-full bg-dark"
+            id="exercise"
+            >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </div>
+        </div>
         <div
-          class="w-full h-3/4 px-4"
+          class="w-full mt-14 h-full px-4"
           id="content"
           hx-get="/session/content"
           hx-trigger="load"
           hx-target="#content"
           hx-swap="innerHTML"
           ></div>
-        <div id="exercise"></div>
       </div>
       <div
         class="hidden w-full h-full
                md:block"
-        >aqui vai o terminal</div>
+        >
+        <div class="w-full h-full">Terminal</div>
+        <footer class="bottom-0 pt-4 pb-2 space-x-4 w-full text-center bg-dark">
+          <a class="underline" href="https://j0suetm.com">Josué Teodoro (J0sueTM) j0suetm.com</a>
+          <a class="underline" href="https://github.com/J0sueTM/lpi4noobs-interactive/graphs/contributors">
+            et. al.
+          </a>
+          <a class="underline" href="https://heartdevs.com/">He4rt Devs</a>
+        </footer>
+      </div>
     </main>
-    <footer class="fixed bottom-0 pt-4 pb-2 space-x-4 w-full text-center bg-dark">
-      <a class="underline" href="https://j0suetm.com">Josué Teodoro (J0sueTM) j0suetm.com</a>
-      <a class="underline" href="https://github.com/J0sueTM/lpi4noobs-interactive/graphs/contributors">
-        et. al.
-      </a>
-      <a class="underline" href="https://heartdevs.com/">He4rt Devs</a>
-    </footer>
   </body>
 </html>

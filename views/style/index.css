@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer components {
+  #content > p {
+    @apply indent-8;
+  }
+  
   #content > h1 {
     @apply mt-2 font-extrabold text-xl md:mt-4 md:text-3xl;
   }
@@ -39,5 +43,13 @@
 
   #content > ul {
     @apply px-6 list-disc;
+  }
+
+  #content > ul > li > ul {
+    @apply px-8 list-disc;
+  }
+
+  #content > ol {
+    @apply px-6 list-decimal;
   }
 }
