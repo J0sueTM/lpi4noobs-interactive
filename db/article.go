@@ -1,11 +1,10 @@
 package db
 
 import (
-	"encoding/json"
+	"errors"
 	"io"
 	"log"
 	"net/http"
-	"os"
 
 	"gorm.io/gorm"
 )
@@ -22,13 +21,8 @@ type Article struct {
 }
 
 func PopulateArticles(resource string) (*Article, error) {
-	data, err := os.ReadFile(resource)
-	if err != nil {
-		return nil, err
-	}
-
 	rootArticle := &Article{}
-	err = json.Unmarshal(data, rootArticle)
+	err := PopulateFromResource(rootArticle, resource)
 	if err != nil {
 		return nil, err
 	}
@@ -124,4 +118,84 @@ func (rootArticle *Article) FindByID(id uint) *Article {
 	}
 
 	return nil
+}
+
+func (rootArticle *Article) FindByTitle(title string) *Article {
+	if rootArticle.Title == title {
+		return rootArticle
+	}
+
+	for _, article := range rootArticle.Children {
+		foundArticle := article.FindByTitle(title)
+		if foundArticle != nil {
+			return foundArticle
+		}
+	}
+
+	return nil
+}
+
+func (rootArticle *Article) FindParent(child *Article) *Article {
+	if rootArticle.ID == child.ID {
+		return child
+	}
+
+	for i, article := range rootArticle.Children {
+		foundChild := article.FindParent(child)
+		// if child is returned, return again the parent instead.
+		if foundChild != nil {
+			if article.ID == child.ID {
+				return rootArticle
+			}
+
+			return &rootArticle.Children[i]
+		}
+	}
+
+	return nil
+}
+
+func (rootArticle *Article) FindNext(article *Article) (*Article, error) {
+	if len(article.Children) > 0 {
+		return &article.Children[0], nil
+	}
+
+	parentArticle := rootArticle.FindParent(article)
+	if parentArticle == nil {
+		return nil, errors.New("failed to find article's parent")
+	}
+
+	for i, child := range parentArticle.Children {
+		if child.ID == article.ID && (i+1) < len(parentArticle.Children) {
+			return &parentArticle.Children[i+1], nil
+		}
+	}
+
+	// parent is last child, go back
+	actualParent := rootArticle.FindParent(parentArticle)
+	if actualParent != nil {
+		for i, child := range actualParent.Children {
+			if child.ID == parentArticle.ID && (i+1) < len(actualParent.Children) {
+				return &actualParent.Children[i+1], nil
+			}
+		}
+	}
+
+	return nil, errors.New("failed to find next article")
+}
+
+func AssociateParentID(id uint) uint {
+	if id >= 7 && id <= 10 {
+		return 2
+	} else if id >= 11 && id <= 15 {
+		return 3
+	} else if id >= 16 && id <= 21 {
+		return 4
+	} else if id >= 22 && id <= 24 {
+		return 5
+	} else if id >= 25 && id <= 28 {
+		return 6
+	}
+
+	return 1
 }

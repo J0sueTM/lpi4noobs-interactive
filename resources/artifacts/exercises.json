@@ -1,0 +1,22 @@
+[
+  {
+    "article_title": "Estrutura",
+    "exercises": [
+      {
+        "content": "Use o comando `ls` para listar o diretório `/`",
+        "checks_with_script": false,
+        "expects": "ls /"
+      },
+      {
+        "content": "Use o comando `ls` para listar o diretório `/opt`",
+        "checks_with_script": false,
+        "expects": "ls /opt"
+      },
+      {
+        "content": "Use o comando `ls` para listar o diretório `/usr/bin`",
+        "checks_with_script": false,
+        "expects": "ls /"
+      }
+    ]
+  }
+]

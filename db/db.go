@@ -9,12 +9,14 @@ import (
 )
 
 const (
-	articlesResource string = "resources/artifacts/articles.json"
+	articlesResource  string = "resources/artifacts/articles.json"
+	exercisesResource string = "resources/artifacts/exercises.json"
 )
 
 type DB struct {
 	Refer       *gorm.DB
 	RootArticle *Article
+	Exercises   []Exercise
 	Sessions    []Session
 }
 
@@ -30,6 +32,11 @@ func New(filePath string) (*DB, error) {
 	}
 
 	err = db.AutoMigrate(&Article{})
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.AutoMigrate(&Exercise{})
 	if err != nil {
 		return nil, err
 	}
@@ -54,6 +61,23 @@ func New(filePath string) (*DB, error) {
 		}
 	}
 
+	exercises, err := ReadExercises(db)
+	if err != nil {
+		return nil, err
+	} else if len(exercises) <= 0 {
+		exercises, err = PopulateExercises(exercisesResource, rootArticle)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, exercise := range exercises {
+			err = exercise.Write(db)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
 	sessions, err := ReadSessions(db)
 	if err != nil {
 		return nil, err
@@ -62,10 +86,10 @@ func New(filePath string) (*DB, error) {
 		defaultSession := Session{
 			Username:   "default",
 			ArticleID:  rootArticle.ID,
-			ExerciseID: 0,
+			ExerciseID: exercises[0].ID,
 		}
 
-		err = WriteSession(db, &defaultSession)
+		err = defaultSession.Write(db)
 		if err != nil {
 			return nil, err
 		}
@@ -76,6 +100,7 @@ func New(filePath string) (*DB, error) {
 	return &DB{
 		Refer:       db,
 		RootArticle: rootArticle,
+		Exercises:   exercises,
 		Sessions:    sessions,
 	}, nil
 }

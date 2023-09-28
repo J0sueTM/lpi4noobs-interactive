@@ -10,7 +10,8 @@ type Session struct {
 	ArticleID uint
 	Article   Article
 
-	ExerciseID uint // FIXME
+	ExerciseID uint
+	Exercise   Exercise
 }
 
 func ReadSessions(db *gorm.DB) ([]Session, error) {
@@ -23,7 +24,7 @@ func ReadSessions(db *gorm.DB) ([]Session, error) {
 	return sessions, nil
 }
 
-func WriteSession(db *gorm.DB, session *Session) error {
+func (session *Session) Write(db *gorm.DB) error {
 	err := db.Create(session).Error
 	return err
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"html/template"
 	"log"
 	"net/http"
 
@@ -30,6 +31,15 @@ func main() {
 		Root:         "views",
 		Extension:    ".html",
 		DisableCache: true,
+		Funcs: template.FuncMap{
+			"inc": func(i uint) uint {
+				return i + 1
+			},
+			"dec": func(i uint) uint {
+				return i - 1
+			},
+			"assocPar": db.AssociateParentID,
+		},
 	})
 
 	e.GET("/", func(c echo.Context) error {
@@ -45,18 +55,24 @@ func main() {
 	e.GET("/hyperscript.min.js", func(c echo.Context) error {
 		return c.File("views/script/hyperscript.min.js")
 	})
-	e.GET("/img/:filename", api.LocalImage)
-	e.GET("/.github/:filename", api.GithubImage)
-	e.GET("/content/img/:filename", api.ContentImage)
+
+	imgG := e.Group("/img")
+	{
+		imgG.GET("/:filename", api.LocalImage)
+		imgG.GET("/github/:filename", api.GithubImage)
+		imgG.GET("/content/:filename", api.ContentImage)
+	}
 
 	lpiAPI := &api.API{
-		DB: lpiDB,
+		DB:    lpiDB,
+		State: &api.State{},
 	}
 
 	sessionG := e.Group("/session")
 	{
 		sessionG.GET("", lpiAPI.Session)
 		sessionG.GET("/content", lpiAPI.Content)
+		sessionG.GET("/content/exercises", lpiAPI.Exercises)
 	}
 
 	err = e.Start(":4192")

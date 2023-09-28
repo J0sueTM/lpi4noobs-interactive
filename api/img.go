@@ -55,7 +55,7 @@ func RemoteImage(c echo.Context, fileURL string) error {
 
 func GithubImage(c echo.Context) error {
 	fileReqURL := fmt.Sprintf(
-		"https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/.github/%s",
+		"https://raw.githubusercontent.com/lanjoni/lpi4noobs/main/.github/%s?raw=true",
 		c.Param("filename"),
 	)
 
