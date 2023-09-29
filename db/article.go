@@ -184,6 +184,26 @@ func (rootArticle *Article) FindNext(article *Article) (*Article, error) {
 	return nil, errors.New("failed to find next article")
 }
 
+func (rootArticle *Article) FindPrevious(article *Article) (*Article, error) {
+	parentArticle := rootArticle.FindParent(article)
+	if parentArticle == nil || len(parentArticle.Children) <= 0 {
+		return nil, errors.New("failed to find article's parent")
+	}
+
+	// first child, so return the parent
+	if parentArticle.Children[0].ID == article.ID {
+		return parentArticle, nil
+	}
+
+	for i, child := range parentArticle.Children[1:] {
+		if child.ID == article.ID {
+			return &parentArticle.Children[i], nil
+		}
+	}
+
+	return nil, errors.New("failed to find previous article")
+}
+
 func AssociateParentID(id uint) uint {
 	if id >= 7 && id <= 10 {
 		return 2
