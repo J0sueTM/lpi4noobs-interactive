@@ -30,7 +30,7 @@
       {
         "content": "Dê uma senha para meu_usuario.",
         "checks_with_script": false,
-        "expects": "passwd meu_usuario`"
+        "expects": "passwd meu_usuario"
       },
       {
         "content": "Inicie uma sessão com `meu_usuario`.",
