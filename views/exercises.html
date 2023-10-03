@@ -1,5 +1,33 @@
 {{ if . }}
-<p>eita porra</p>
+<div class="w-full flex flex-col">
+  <div class="w-full flex flex-row">
+    {{ range $kex := . }}
+    <p class="px-4 flex flex-col border border-l-0 border-light cursor-pointer
+              first:border-l first:rounded-tl-lg first:rounded-bl-lg
+              last:rounded-tr-lg last:rounded-br-lg
+              hover:bg-light hover:opacity-60 hover:text-dark"
+       _="on click
+            add .hidden to .exercise__content
+            toggle .hidden on {{ printf "#exercise__content-%d" $kex.Key }}
+          end">
+      Ex. {{ $kex.Key }}
+    </p>
+    {{ end }}
+  </div>
+
+  {{ range $kex := . }}
+  <p
+    id={{ printf "exercise__content-%d" $kex.Key }}
+    class="exercise__content hidden mt-2"
+    >
+    {{ $kex.Exercise.Content }}
+  </p>
+  {{ end }}
+
+  <script type="text/hyperscript">
+    init remove .hidden from #exercise__content-0
+  </script>
+</div>
 {{ else }}
 <p>Não há exercícios para este artigo!</p>
 {{ end }}

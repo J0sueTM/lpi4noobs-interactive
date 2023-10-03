@@ -45,6 +45,11 @@ func (lpiAPI *API) Session(c echo.Context) error {
 		lpiAPI.State.Article,
 	)
 
+	err = session.Update(lpiAPI.DB.Refer)
+	if err != nil {
+		return err
+	}
+
 	return c.Render(http.StatusOK, "session.html", lpiAPI.State)
 }
 
@@ -69,6 +74,17 @@ func (lpiAPI *API) Content(c echo.Context) error {
 	return c.HTML(http.StatusOK, string(rndrDoc))
 }
 
+type KeyedExercise struct {
+	Key      int
+	Exercise *db.Exercise
+}
+
 func (lpiAPI *API) Exercises(c echo.Context) error {
-	return c.Render(http.StatusOK, "exercises.html", lpiAPI.State.Exercises)
+	kExs := make([]KeyedExercise, len(lpiAPI.State.Exercises))
+	for i := range lpiAPI.State.Exercises {
+		kExs[i].Key = i
+		kExs[i].Exercise = &lpiAPI.State.Exercises[i]
+	}
+
+	return c.Render(http.StatusOK, "exercises.html", kExs)
 }

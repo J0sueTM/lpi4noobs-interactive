@@ -26,5 +26,12 @@ func ReadSessions(db *gorm.DB) ([]Session, error) {
 
 func (session *Session) Write(db *gorm.DB) error {
 	err := db.Create(session).Error
+
+	return err
+}
+
+func (session *Session) Update(db *gorm.DB) error {
+	err := db.Model(session).Update("article_id", session.ArticleID).Error
+
 	return err
 }

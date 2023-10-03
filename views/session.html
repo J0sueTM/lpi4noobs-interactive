@@ -42,8 +42,8 @@
           <div
             class="flex flex-row space-x-2 pb-2 cursor-pointer items-center bg-gradient-to-t from-dark to-transparent"
             _="on click
-                 toggle .hidden on #exercise
-                 toggle .hidden on #exercise__close-btn
+                 toggle .hidden on #exercises
+                 toggle .hidden on #exercises__close-btn
                end"
             >
             <svg class="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
@@ -55,11 +55,11 @@
             </svg>            
           </div>
           <div
-            id="exercise"
+            id="exercises"
             class="hidden w-full bg-dark pb-2"
             hx-get="/session/content/exercises"
             hx-trigger="load"
-            hx-target="#exercise"
+            hx-target="#exercises"
             hx-swap="innerHTML"
             ></div>
         </div>
