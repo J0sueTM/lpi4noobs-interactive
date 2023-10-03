@@ -18,5 +18,95 @@
         "expects": "ls /"
       }
     ]
-  }
+  },
+  {
+    "article_title": "Su e Sudo",
+    "exercises": [
+      {
+        "content": "Crie um novo usuário chamado `meu_usuario`.",
+        "checks_with_script": true,
+        "expects": "id -u meu_usuario &>/dev/null && echo '1' || echo '0'"
+      },
+      {
+        "content": "Dê uma senha para meu_usuario.",
+        "checks_with_script": false,
+        "expects": "passwd meu_usuario"
+      },
+      {
+        "content": "Inicie uma sessão com `meu_usuario`.",
+        "checks_with_script": true,
+        "expects": "su meu_usuario"
+      }
+    ]
+  },  
+  {
+    "article_title": "Man",
+    "exercises": [
+      {
+        "content": "Apresente o manual do comando `ls`.",
+        "checks_with_script": false,
+        "expects": "man ls"
+      }
+    ]
+  },  
+  {
+    "article_title": "Variáveis de Ambiente",
+    "exercises": [
+      {
+        "content": "Crie uma variável chamada `VAR` com o valor de `Nova variavel`.",
+        "checks_with_script": true,
+        "expects": "[[ $VAR == 'Nova variavel' ]] && echo '1' || echo '0'"
+      },
+      {
+        "content": "Mostre o conteúdo da variável criada.",
+        "checks_with_script": false,
+        "expects": "echo $VAR"
+      },
+      {
+        "content": "Crie uma variável de ambiente usando a variável shell criada anteriormente.",
+        "checks_with_script": false,
+        "expects": "export VAR"
+      }
+    ]
+  },
+  {
+    "article_title": "Permissionamento",
+    "exercises": [
+      {
+        "content": "Crie um arquivo chamado `teste.txt`.",
+        "checks_with_script": false,
+        "expects": "touch teste.txt'"
+      },
+      {
+        "content": "Liste as permissões do arquivo de forma detalhada.",
+        "checks_with_script": false,
+        "expects": "ls -l"
+      },
+      {
+        "content": "Adicione a permissão de execução para o usuário ao arquivo criado.",
+        "checks_with_script": true,
+        "expects": "[[ -x teste.txt ]] && echo '1' || echo '0'"
+      },
+      {
+        "content": "Adicione a permissão de escrita e execução para os grupos dos quais o usuário pertence.",
+        "checks_with_script": false,
+        "expects": "chmod g+wx teste.txt"
+      },
+      {
+        "content": "Defina apenas a permissão de execução para os outros.",
+        "checks_with_script": true,
+        "expects": "[[ -x teste.txt ]] && echo '1' || echo '0'"
+      },
+      {
+        "content": "Mude a propriedade do arquivo `teste.txt` para o usuário `novouser`.",
+        "checks_with_script": true,
+        "expects": "[[ $(stat -c '%a' teste.txt | rev | cut -c 1) == 1 ]] && echo '1' || echo '0'"
+      },
+      {
+        "content": "Altere a permissão de um diretório e consequentemente a de todos os arquivos que estão nele, usando o usuário `novouser` e o diretório `./novo`",
+        "checks_with_script": true,
+        "expects": " [[ $(find novo -type f ! -user novouser -o -type d ! -user novouser | grep -q .) ]] && echo '0' || echo '1'"
+      }
+    ]
+  }, 
 ]
